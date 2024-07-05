@@ -1,0 +1,113 @@
+# Escala en base a la cantidad de solicitudes http
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-video-playback
+  namespace: beta
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: video-playback
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: pbbase
+          selector:
+            matchLabels:
+              host: playback.sitrack.io
+        target:
+          type: AverageValue
+          averageValue: 500m
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-video-playback-videotest
+  namespace: beta
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: video-playback-videotest
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: pbvideotest
+          selector:
+            matchLabels:
+              host: playback.videotest.sitrack.io
+        target:
+          type: AverageValue
+          averageValue: 500m
+
+
+# Escala en base a la cantidad de conexiones simultaneas TCP
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-video-playback-tcp
+  namespace: beta
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: video-playback
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: pbtcpbase
+          selector:
+            matchLabels:
+              host: playback.sitrack.io
+        target:
+          type: AverageValue
+          averageValue: 500m
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-video-playback-videotest-tcp
+  namespace: beta
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: video-playback-videotest
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: pbtcpvideotest
+          selector:
+            matchLabels:
+              host: playback.videotest.sitrack.io
+        target:
+          type: AverageValue
+          averageValue: 500m
+
+  # Metricas personalizadas con su filtro que usa prometheus para crear la metrica personalizada
+
+  # pbtcpvideotest: 'traefik_open_connections{namespace!="",pod=~"video-playback-videotest.*",entrypoint="pbtcpvideotest"}'
+  # pbtcpbase:      'traefik_open_connections{namespace!="",pod=~"video-playback-videotest.*",entrypoint="pbtcp"}'
+  # pbvideotest:    'traefik_service_requests_total{namespace!="",pod=~"video-playback-videotest.*",host="playback.videotest.sitrack.io"}'
+  # pbbase:         'traefik_service_requests_total{namespace!="",pod=~"video-playback-videotest.*",host="playback.videotest.sitrack.io"}'
+
+  # Verificacion de metricas externas para el servicio de video llamado video-playback
+  #  kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbtcpvideotest"
+  #  kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbtcpbase"
+  #  kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbvideotest"
+  #  kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbbase"
