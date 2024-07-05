@@ -1,0 +1,55 @@
+# Deshabilitar todos los ServiceMonitors predeterminados
+defaultRules:
+  create: false
+
+kubeControllerManager:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeProxy:
+  enabled: false
+
+kubelet:
+  enabled: false
+
+kubeStateMetrics:
+  enabled: false
+
+nodeExporter:
+  enabled: false
+
+alertmanager:
+  enabled: false
+
+grafana:
+  enabled: false
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: true
+    serviceMonitorSelector:
+      matchLabels:
+        release: prometheus-operator
+
+  # Configuracion del servicemonitor para traefik
+  # Tener en cuenta que todos los servicesmonitor definidos aca se le agrega el matchLabels -> release: prometheus-operator
+  additionalServiceMonitors:
+    - name: traefik
+      namespace: monitoring
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: traefik-beta
+          app.kubernetes.io/name: traefik
+      namespaceSelector:
+        matchNames:
+          - beta
+      endpoints:
+        - port: metrics
+          path: /metrics
+          interval: 15s
+

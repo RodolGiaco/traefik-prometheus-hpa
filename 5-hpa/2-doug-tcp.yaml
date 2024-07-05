@@ -1,0 +1,48 @@
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-doug-tcp
+  namespace: beta
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: doug-tcp-videotest
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: dgtcpbase
+          selector:
+            matchLabels:
+              host: playback.sitrack.io
+        target:
+          type: AverageValue
+          averageValue: 500m
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-doug-tcp-videotest
+  namespace: beta
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: doug-tcp-videotest
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: External
+      external:
+        metric:
+          name: dgtcpvideotest
+          selector:
+            matchLabels:
+              host: playback.videotest.sitrack.io
+        target:
+          type: AverageValue
+          averageValue: 500m

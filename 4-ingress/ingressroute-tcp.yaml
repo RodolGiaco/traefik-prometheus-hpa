@@ -1,0 +1,128 @@
+#apiVersion: traefik.io/v1alpha1
+#kind: IngressRouteTCP
+#metadata:
+#  name: ingressroutetcpfoo
+#
+#spec:
+#  entryPoints:                    # [1]
+#    - footcp
+#  routes:                         # [2]
+#    - match: HostSNI(`*`)           # [3]
+#      priority: 10                  # [4]
+#      middlewares:
+#        - name: middleware1           # [5]
+#          namespace: default          # [6]
+#      services:                     # [7]
+#        - name: foo                   # [8]
+#          port: 8080                  # [9]
+#          weight: 10                  # [10]
+#          proxyProtocol:              # [11]
+#            version: 1                # [12]
+#          serversTransport: transport # [13]
+#          nativeLB: true              # [14]
+#  tls:                            # [15]
+#    secretName: supersecret       # [16]
+#    options:                      # [17]
+#      name: opt                   # [18]
+#      namespace: default          # [19]
+#    certResolver: foo             # [20]
+#    domains:                      # [21]
+#      - main: example.net           # [22]
+#        sans:                       # [23]
+#          - a.example.net
+#          - b.example.net
+#    passthrough: false            # [24]
+
+#  [1]	entryPoints	List of entrypoints names
+#  [2]	routes	List of routes
+#  [3]	routes[n].match	Defines the rule of the underlying router
+#  [4]	routes[n].priority	Defines the priority to disambiguate rules of the same length, for route matching
+#  [5]	middlewares[n].name	Defines the MiddlewareTCP name
+#  [6]	middlewares[n].namespace	Defines the MiddlewareTCP namespace
+#  [7]	routes[n].services	List of Kubernetes service definitions (See below for ExternalName Service setup)
+#  [8]	services[n].name	Defines the name of a Kubernetes service
+#  [9]	services[n].port	Defines the port of a Kubernetes service. This can be a reference to a named port.
+#  [10]	services[n].weight	Defines the weight to apply to the server load balancing
+#  [11]	services[n].proxyProtocol	Defines the PROXY protocol configuration
+#  [12]	services[n].proxyProtocol.version	Defines the PROXY protocol version
+#  [13]	services[n].serversTransport	Defines the reference to a ServersTransportTCP. The ServersTransport namespace is assumed to be the Kubernetes service namespace (see ServersTransport reference).
+#  [14]	services[n].nativeLB	Controls, when creating the load-balancer, whether the LB's children are directly the pods IPs or if the only child is the Kubernetes Service clusterIP.
+#  [15]	tls	Defines TLS certificate configuration
+#  [16]	tls.secretName	Defines the secret name used to store the certificate (in the IngressRoute namespace)
+#  [17]	tls.options	Defines the reference to a TLSOption
+#  [18]	tls.options.name	Defines the TLSOption name
+#  [19]	tls.options.namespace	Defines the TLSOption namespace
+#  [20]	tls.certResolver	Defines the reference to a CertResolver
+#  [21]	tls.domains	List of domains
+#  [22]	tls.domains[n].main	Defines the main domain name
+#  [23]	tls.domains[n].sans	List of SANs (alternative domains)
+#  [24]	tls.passthrough	If true, delegates the TLS termination to the backend
+
+
+
+# Se hace el enrutamiento por puertos ya que por dominio se tiene que habilitar TLS
+# Los servicios de video que son TCP son video-playback y doug-tcp
+# Se definen el enrutamiento a los services de tipo nodeport que apuntan  al puerto tcp de los servicios
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: ingress-doug-tcp
+spec:
+  entryPoints:
+    - dgtcp
+  routes:
+    - match: HostSNI(`*`)
+      priority: 1
+      services:
+        - name: doug-tcp
+          port: 12094
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: ingress-doug-tcp-videotest
+spec:
+  entryPoints:
+    - dgtcpvideotest
+  routes:
+    - match: HostSNI(`*`)
+      priority: 1
+      services:
+        - name: doug-tcp-videotest
+          port: 12094
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: ingress-video-playback
+spec:
+  entryPoints:
+    - pbtcp
+  routes:
+    - match: HostSNI(`*`)
+      priority: 1
+      services:
+        - name: playback-tcp
+          port: 12093
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: ingress-video-playback-videotest
+spec:
+  entryPoints:
+    - pbtcpvideotest
+  routes:
+    - match: HostSNI(`*`)
+      priority: 1
+      services:
+        - name: playback-tcp-videotest
+          port: 12093
+---
+
+
