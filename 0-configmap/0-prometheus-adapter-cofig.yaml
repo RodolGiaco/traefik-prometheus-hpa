@@ -23,8 +23,11 @@ data:
     
    
     externalRules:
-      # Reglas de las metricas externas para conexiones TCP
-      - seriesQuery: 'traefik_open_connections{namespace!="",pod=~"video-playback-videotest.*",entrypoint="pbtcpvideotest"}'
+      #///////////////////////// REGLAS DE METRICAS PARA EL CORPORATE BASE /////////////////////////////// # 
+      
+      # Reglas de las metricas externas para conexiones HTTP video-playback
+  
+      - seriesQuery: 'traefik_open_connections{namespace!="",pod!="",entrypoint="pbtcp"}'
         resources:
           overrides:
             namespace:
@@ -32,24 +35,13 @@ data:
             pod:
               resource: pod
         name:
-          matches: "^(.*)_total"
-          as: "pbtcpvideotest"
-        metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[2m])) by (entrypoint, <<.GroupBy>>)'
-      - seriesQuery: 'traefik_open_connections{namespace!="",pod=~"video-playback-videotest.*",entrypoint="pbtcp"}'
-        resources:
-          overrides:
-            namespace:
-              resource: namespace
-            pod:
-              resource: pod
-        name:
-          matches: "^(.*)_total"
+          matches: "^(.*)_open_connections"
           as: "pbtcpbase"
-        metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[2m])) by (entrypoint, <<.GroupBy>>)'    
-    
-    
-      # Reglas de las metricas externas para cantidad de solicitudes HTTP
-      - seriesQuery: 'traefik_service_requests_total{namespace!="",pod=~"video-playback-videotest.*",host="playback.videotest.sitrack.io"}'
+        metricsQuery: 'sum(<<.Series>>{<<.LabelMatchers>>}) by (entrypoint, <<.GroupBy>>)'
+        
+        # Reglas de las metricas externas para conexiones HTTP doug
+        
+      - seriesQuery: 'traefik_open_connections{namespace!="",pod!="",entrypoint="dgtcp"}'
         resources:
           overrides:
             namespace:
@@ -57,10 +49,13 @@ data:
             pod:
               resource: pod
         name:
-          matches: "^(.*)_total"
-          as: "pbvideotest"
-        metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[2m])) by (host, <<.GroupBy>>)'
-      - seriesQuery: 'traefik_service_requests_total{namespace!="",pod=~"video-playback-.*",host="playback.sitrack.io"}'
+          matches: "^(.*)_open_connections"
+          as: "dgtcpbase"
+        metricsQuery: 'sum(<<.Series>>{<<.LabelMatchers>>}) by (entrypoint, <<.GroupBy>>)'
+        
+        # Reglas de las metricas externas para conexiones HTTP video-playback
+      
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-.*", host="playback.sitrack.io"}'
         resources:
           overrides:
             namespace:
@@ -70,9 +65,77 @@ data:
         name:
           matches: "^(.*)_total"
           as: "pbbase"
-        metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[2m])) by (host, <<.GroupBy>>)'
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*video-playback-.*", host="playback.sitrack.io"}[2m])) by (host)'
+          
+        # Reglas de las metricas externas para conexiones HTTP doug
+          
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*doug-.*", host="playback.sitrack.io"}' 
+        resources:
+          overrides:
+            namespace:
+              resource: namespace
+            pod:
+              resource: pod
+        name:
+          matches: "^(.*)_total"
+          as: "dgbase"
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*doug-.*", host="playback.sitrack.io"}[2m])) by (host)'
         
+      # ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      #///////////////////////// REGLAS DE METRICAS PARA EL CORPORATE VIDEOTEST /////////////////////////////// # 
+      
+      # Reglas de las metricas externas para conexiones HTTP video-playback
+      
+      - seriesQuery: 'traefik_open_connections{namespace!="",pod!="",entrypoint="pbtcpvideotest"}'
+        resources:
+          overrides:
+            namespace:
+              resource: namespace
+            pod:
+              resource: pod
+        name:
+          matches: "^(.*)_open_connections"
+          as: "pbtcpvideotest"
+        metricsQuery: 'sum(<<.Series>>{<<.LabelMatchers>>}) by (entrypoint, <<.GroupBy>>)'
         
+        # Reglas de las metricas externas para conexiones HTTP doug
+      
+      - seriesQuery: 'traefik_open_connections{namespace!="",pod!="",entrypoint="dgtcpvideotest"}'
+        resources:
+          overrides:
+            namespace:
+              resource: namespace
+            pod:
+              resource: pod
+        name:
+          matches: "^(.*)_open_connections"
+          as: "dgtcpvideotest"
+        metricsQuery: 'sum(<<.Series>>{<<.LabelMatchers>>}) by (entrypoint, <<.GroupBy>>)'
         
+        # Reglas de las metricas externas para conexiones HTTP video-playback
+      
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-videotest.*", host="playback.videotest.sitrack.io"}'
+        resourc es:
+          overrides:
+            namespace:
+              resource: namespace
+            pod:
+              resource: pod
+        name:
+          matches: "^(.*)_total"
+          as: "pbvideotest"
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*video-playback-videotest.*", host="playback.videotest.sitrack.io"}[2m])) by (host)' 
         
-
+        # Reglas de las metricas externas para conexiones HTTP doug
+      
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*doug-videotest.*", host="playback.videotest.sitrack.io"}'
+        resourc es:
+          overrides:
+            namespace:
+              resource: namespace
+            pod:
+              resource: pod
+        name:
+          matches: "^(.*)_total"
+          as: "dgvideotest"
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*doug-.*", host="playback.videotest.sitrack.io"}[2m])) by (host)'

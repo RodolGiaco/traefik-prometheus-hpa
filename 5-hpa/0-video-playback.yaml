@@ -11,7 +11,7 @@ spec:
     kind: Deployment
     name: video-playback
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 4
   metrics:
     - type: External
       external:
@@ -22,7 +22,7 @@ spec:
               host: playback.sitrack.io
         target:
           type: AverageValue
-          averageValue: 500m
+          averageValue: 100m
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -35,7 +35,7 @@ spec:
     kind: Deployment
     name: video-playback-videotest
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 4
   metrics:
     - type: External
       external:
@@ -46,7 +46,7 @@ spec:
               host: playback.videotest.sitrack.io
         target:
           type: AverageValue
-          averageValue: 500m
+          averageValue: 100m
 
 
 # Escala en base a la cantidad de conexiones simultaneas TCP
@@ -62,7 +62,7 @@ spec:
     kind: Deployment
     name: video-playback
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 4
   metrics:
     - type: External
       external:
@@ -70,10 +70,10 @@ spec:
           name: pbtcpbase
           selector:
             matchLabels:
-              host: playback.sitrack.io
+              entrypoint: pbtcp
         target:
           type: AverageValue
-          averageValue: 500m
+          averageValue: 4000m # 4 conexiones maximas TCP
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -86,7 +86,7 @@ spec:
     kind: Deployment
     name: video-playback-videotest
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 4
   metrics:
     - type: External
       external:
@@ -94,10 +94,10 @@ spec:
           name: pbtcpvideotest
           selector:
             matchLabels:
-              host: playback.videotest.sitrack.io
+              entrypoint: pbtcpvideotest
         target:
           type: AverageValue
-          averageValue: 500m
+          averageValue: 4000m # 4 conexiones maximas TCP
 
   # Metricas personalizadas con su filtro que usa prometheus para crear la metrica personalizada
 

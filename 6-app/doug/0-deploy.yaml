@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: beta
+  name: doug
+  labels:
+    app: doug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: doug
+  template:
+    metadata:
+      labels:
+        app: doug
+    spec:
+      containers:
+        - name: doug
+          image: rodolgiaco/hello-rodo:1.1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JVM_OPTIONS
+              value: "-Xms1024m -Xmx4072m"

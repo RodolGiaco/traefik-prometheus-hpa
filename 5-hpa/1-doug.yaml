@@ -8,9 +8,9 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: doug-videotest
+    name: doug
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 4
   metrics:
     - type: External
       external:
@@ -21,7 +21,7 @@ spec:
               host: playback.sitrack.io
         target:
           type: AverageValue
-          averageValue: 500m
+          averageValue: 100m
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -34,7 +34,7 @@ spec:
     kind: Deployment
     name: doug-videotest
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 4
   metrics:
     - type: External
       external:
@@ -45,4 +45,4 @@ spec:
               host: playback.videotest.sitrack.io
         target:
           type: AverageValue
-          averageValue: 500m
+          averageValue: 100m

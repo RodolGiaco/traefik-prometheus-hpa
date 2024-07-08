@@ -25,7 +25,7 @@ print_msg() {
 print_msg $BLUE "Instalando Traefik..."
 helm repo add traefik https://helm.traefik.io/traefik
 helm repo update
-helm install traefik traefik/traefik --namespace beta --create-namespace -f 8-values/traefik-beta-values.yaml
+helm install traefik traefik/traefik --namespace beta --create-namespace -f 1-helm-values/0-traefik-beta-values.yaml
 sleep 20
 kubectl apply -f 3-middleware/
 kubectl apply -f 4-ingress/
@@ -45,11 +45,8 @@ helm install prometheus prometheus-community/prometheus -n monitoring
 print_msg $GREEN "Prometheus aplicado correctamente."
 
 helm install prometheus-adapter prometheus-community/prometheus-adapter --namespace monitoring -f  1-helm-values/2-prometheus-adapter-monitoring-values.yaml
-print_msg $GREEN "ConfigMap personalizado y prometheus-adapter aplicados correctamente."
 print_msg $GREEN "Implementación de Prometheus completada."
 print_msg $GREEN "Todas las aplicaciones han sido aplicadas correctamente."
 
-sleep 60
+#kubectl apply -f 5-hpa/
 
-
-#para que aparescan las metricas personalizadas si o si tenemos que mandar trafico a los pod

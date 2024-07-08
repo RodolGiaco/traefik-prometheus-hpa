@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: beta
+  name: doug-videotest
+  labels:
+    app: doug-videotest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: doug-videotest
+  template:
+    metadata:
+      labels:
+        app: doug-videotest
+    spec:
+      containers:
+        - name: doug-videotest
+          image: rodolgiaco/hello-rodo:1.1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JVM_OPTIONS
+              value: "-Xms1024m -Xmx4072m"

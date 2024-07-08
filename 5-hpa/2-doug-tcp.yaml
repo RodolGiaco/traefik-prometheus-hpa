@@ -8,9 +8,9 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: doug-tcp-videotest
+    name: doug-tcp
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 4
   metrics:
     - type: External
       external:
@@ -18,10 +18,10 @@ spec:
           name: dgtcpbase
           selector:
             matchLabels:
-              host: playback.sitrack.io
+              entrypoint: dgtcp
         target:
           type: AverageValue
-          averageValue: 500m
+          averageValue: 4000m # 4 conexiones maximas TCP
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -34,7 +34,7 @@ spec:
     kind: Deployment
     name: doug-tcp-videotest
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 4
   metrics:
     - type: External
       external:
@@ -42,7 +42,7 @@ spec:
           name: dgtcpvideotest
           selector:
             matchLabels:
-              host: playback.videotest.sitrack.io
+              entrypoint: dgtcpvideotest
         target:
           type: AverageValue
-          averageValue: 500m
+          averageValue: 4000m # 4 conexiones maximas TCP

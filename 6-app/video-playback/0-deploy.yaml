@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: beta
+  name: video-playback
+  labels:
+    app: video-playback
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: video-playback
+  template:
+    metadata:
+      labels:
+        app: video-playback
+    spec:
+      containers:
+        - name: hello-containerv1
+          image: rodolgiaco/hello-rodo:1.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+            - containerPort: 9000
+          env:
+            - name: JVM_OPTIONS
+              value: "-Xms1024m -Xmx4072m"
