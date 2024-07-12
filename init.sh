@@ -14,7 +14,19 @@ chmod +x delete_all.sh
 chmod +x install_or_upgrade_traefik.sh
 chmod +x install_or_upgrade_prometheus.sh
 chmod +x install_hpa_apps.sh
+chmod +x external_metrics.sh
 
+### Instalar jq si no está presente
+install_jq() {
+  if ! command -v jq &> /dev/null; then
+    print_msg $BLUE "Instalando jq..."
+    sudo apt-get update
+    sudo apt-get install -y jq
+    print_msg $GREEN "jq instalado correctamente."
+  else
+    print_msg $GREEN "jq ya está instalado."
+  fi
+}
 
 
 ## Menú interactivo
@@ -41,9 +53,7 @@ case $option in
   	;;
   3) ./install_or_upgrade_prometheus.sh
 	  ;;
-  4) print_msg $blue "Fetching metrics from external.metrics.k8s.io..."
-     sleep 15
-     kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbtcpvideotest" | jq .
+  4) ./external_metrics.sh
 	  ;;
   5) ./delete_all.sh
 	  ;;
