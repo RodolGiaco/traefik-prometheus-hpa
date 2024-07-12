@@ -1,27 +1,3 @@
-# Deshabilitar todos los ServiceMonitors predeterminados
-defaultRules:
-  create: false
-
-kubeControllerManager:
-  enabled: false
-
-kubeEtcd:
-  enabled: false
-
-kubeScheduler:
-  enabled: false
-
-kubeProxy:
-  enabled: false
-
-kubelet:
-  enabled: false
-
-kubeStateMetrics:
-  enabled: false
-
-nodeExporter:
-  enabled: false
 
 alertmanager:
   enabled: false
@@ -35,6 +11,9 @@ prometheus:
     serviceMonitorSelector:
       matchLabels:
         release: prometheus-operator
+    ruleSelector:
+      matchLabels:
+        role: prometheus-video-rulefiles
 
   # Configuracion del servicemonitor para traefik
   # Tener en cuenta que todos los servicesmonitor definidos aca se le agrega el matchLabels -> release: prometheus-operator

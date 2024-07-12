@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-video-rules
+  namespace: monitoring
+  labels:
+    role: prometheus-video-rulefiles
+spec:
+  groups:
+    - name: video-metrics-alerts
+      rules:
+        - alert: HighHttpRateV1
+          expr: rate(traefik_service_requests_total{namespace!="",pod!="",host="multimediakind.ddns.net"}[2m]) > 0.005
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High http_rate-video detected"
+            description: "http_rate_video has exceeded the threshold of 0.05 for more than 5 minutes."
+
+

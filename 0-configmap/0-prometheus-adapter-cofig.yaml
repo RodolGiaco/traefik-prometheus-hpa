@@ -55,7 +55,7 @@ data:
         
         # Reglas de las metricas externas para conexiones HTTP video-playback
       
-      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-.*", host="playback.sitrack.io"}'
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-.*", host="multimediakind.ddns.net"}'
         resources:
           overrides:
             namespace:
@@ -65,11 +65,11 @@ data:
         name:
           matches: "^(.*)_total"
           as: "pbbase"
-        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*video-playback-.*", host="playback.sitrack.io"}[2m])) by (host)'
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*video-playback-.*", host="multimediakind.ddns.net"}[2m])) by (host)'
           
         # Reglas de las metricas externas para conexiones HTTP doug
           
-      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*doug-.*", host="playback.sitrack.io"}' 
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*doug-.*", host="multimediakind.ddns.net"}'  
         resources:
           overrides:
             namespace:
@@ -79,7 +79,7 @@ data:
         name:
           matches: "^(.*)_total"
           as: "dgbase"
-        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*doug-.*", host="playback.sitrack.io"}[2m])) by (host)'
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*doug-.*", host="multimediakind.ddns.net"}[2m])) by (host)'
         
       # ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       #///////////////////////// REGLAS DE METRICAS PARA EL CORPORATE VIDEOTEST /////////////////////////////// # 
@@ -115,7 +115,7 @@ data:
         # Reglas de las metricas externas para conexiones HTTP video-playback
       
       - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-videotest.*", host="playback.videotest.sitrack.io"}'
-        resourc es:
+        resources:
           overrides:
             namespace:
               resource: namespace
@@ -129,7 +129,7 @@ data:
         # Reglas de las metricas externas para conexiones HTTP doug
       
       - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*doug-videotest.*", host="playback.videotest.sitrack.io"}'
-        resourc es:
+        resources:
           overrides:
             namespace:
               resource: namespace

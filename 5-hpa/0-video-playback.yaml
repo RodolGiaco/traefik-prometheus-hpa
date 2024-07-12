@@ -19,7 +19,7 @@ spec:
           name: pbbase
           selector:
             matchLabels:
-              host: playback.sitrack.io
+              host: multimediakind.ddns.net
         target:
           type: AverageValue
           averageValue: 100m
@@ -99,12 +99,12 @@ spec:
           type: AverageValue
           averageValue: 4000m # 4 conexiones maximas TCP
 
-  # Metricas personalizadas con su filtro que usa prometheus para crear la metrica personalizada
+  # Metricas personalizadas con su filtro que usa prometheus para crearla
 
-  # pbtcpvideotest: 'traefik_open_connections{namespace!="",pod=~"video-playback-videotest.*",entrypoint="pbtcpvideotest"}'
-  # pbtcpbase:      'traefik_open_connections{namespace!="",pod=~"video-playback-videotest.*",entrypoint="pbtcp"}'
-  # pbvideotest:    'traefik_service_requests_total{namespace!="",pod=~"video-playback-videotest.*",host="playback.videotest.sitrack.io"}'
-  # pbbase:         'traefik_service_requests_total{namespace!="",pod=~"video-playback-videotest.*",host="playback.videotest.sitrack.io"}'
+  # pbtcpvideotest: 'traefik_open_connections{namespace!="",pod!="",entrypoint="pbtcpvideotest"}'
+  # pbtcpbase:      'traefik_open_connections{namespace!="",pod!="",entrypoint="pbtcp"}'
+  # pbvideotest:    'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-videotest.*", host="playback.videotest.sitrack.io"}'
+  # pbbase:         'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback.*", host="playback.sitrack.io"}'
 
   # Verificacion de metricas externas para el servicio de video llamado video-playback
   #  kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbtcpvideotest"

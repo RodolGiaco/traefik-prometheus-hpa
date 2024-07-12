@@ -18,7 +18,7 @@ spec:
           name: dgbase
           selector:
             matchLabels:
-              host: playback.sitrack.io
+              host: multimediakind.ddns.net
         target:
           type: AverageValue
           averageValue: 100m

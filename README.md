@@ -19,8 +19,8 @@ Este repositorio proporciona una configuración para instalar y configurar Traef
 2. **Ejecutar el script de configuración**
 
 ```bash
-chmod +x config.sh
-./config.sh
+chmod +x init.sh
+./init.sh
 ```
 
 El script `config.sh` realiza las siguientes acciones:

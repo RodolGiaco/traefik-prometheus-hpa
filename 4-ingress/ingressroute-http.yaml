@@ -76,8 +76,8 @@ spec:
     - web
   routes:
     # Se definen el enrutamiento para los services de tipo nodeport para el servicio de video llamado video-playback
-    - match: Host(`playback.sitrack.io`) && PathPrefix(`/playback`)
-#    - match: Host(`multimediakind.ddns.net`) && PathPrefix(`/playback`)
+#    - match: Host(`playback.sitrack.io`) && PathPrefix(`/playback`)
+    - match: Host(`multimediakind.ddns.net`) && PathPrefix(`/playback`)
       kind: Rule
       priority: 1
       middlewares:
@@ -121,8 +121,8 @@ spec:
     - web
   routes:
     # Se definen el enrutamiento para los services de tipo nodeport para el servicio de video llamado doug
-    - match: Host(`playback.sitrack.io`) && PathPrefix(`/api`)
-#    - match: Host(`multimediakind.ddns.net`) && PathPrefix(`/api`)
+#    - match: Host(`playback.sitrack.io`) && PathPrefix(`/api`)
+    - match: Host(`multimediakind.ddns.net`) && PathPrefix(`/api`)
       kind: Rule
       priority: 1
       middlewares:
