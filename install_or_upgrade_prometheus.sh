@@ -12,7 +12,7 @@ print_msg() {
 ## Function to install or upgrade Prometheus
 print_msg $blue "Installing/Upgrading Prometheus..."
 kubectl create namespace monitoring 2>/dev/null || print_msg $yellow "Namespace monitoring already exists"
-kubectl apply -f "0-configmap/0-prometheus-adapter-cofig.yaml"
+kubectl apply -f "0-configmap/0-prometheus-adapter-config.yaml"
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 

@@ -2,14 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: doug-tcp
-  namespace: beta
 spec:
   selector:
     app: doug-tcp
   ports:
     - protocol: TCP
       port: 12094
-      targetPort: 9000
+      targetPort: 12094
   type: NodePort
 
 ---
@@ -17,7 +16,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: doug-tcp-videotest
-  namespace: beta
 spec:
   selector:
     app: doug-tcp-videotest

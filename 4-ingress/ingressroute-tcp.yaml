@@ -68,7 +68,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRouteTCP
 metadata:
   name: ingress-doug-tcp
-  namespace: beta
 spec:
   entryPoints:
     - dgtcp
@@ -85,7 +84,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRouteTCP
 metadata:
   name: ingress-doug-tcp-videotest
-  namespace: beta
 spec:
   entryPoints:
     - dgtcpvideotest
@@ -101,7 +99,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRouteTCP
 metadata:
   name: ingress-video-playback
-  namespace: beta
 spec:
   entryPoints:
     - pbtcp
@@ -117,7 +114,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRouteTCP
 metadata:
   name: ingress-video-playback-videotest
-  namespace: beta
 spec:
   entryPoints:
     - pbtcpvideotest

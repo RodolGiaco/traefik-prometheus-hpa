@@ -70,7 +70,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: ingresshttp-video-playback
-  namespace: beta
 spec:
   entryPoints:
     - web
@@ -82,7 +81,6 @@ spec:
       priority: 1
       middlewares:
         - name: ratelimit
-          namespace: beta
       services:
         - name: video-playback-api
           port: 4444
@@ -93,7 +91,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: ingresshttp-video-playback-videotest
-  namespace: beta
 spec:
   entryPoints:
     - web
@@ -104,7 +101,6 @@ spec:
       priority: 1
       middlewares:
         - name: ratelimit
-          namespace: beta
       services:
         - name: video-playback-api-videotest
           port: 4444
@@ -115,7 +111,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: ingresshttp-doug
-  namespace: beta
 spec:
   entryPoints:
     - web
@@ -127,7 +122,6 @@ spec:
       priority: 1
       middlewares:
         - name: ratelimit
-          namespace: beta
       services:
         - name: doug-api
           port: 4444
@@ -138,7 +132,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: ingresshttp-doug-videotest
-  namespace: beta
 spec:
   entryPoints:
     - web
@@ -149,7 +142,6 @@ spec:
       priority: 1
       middlewares:
         - name: ratelimit
-          namespace: beta
       services:
         - name: doug-api-videotest
           port: 4444

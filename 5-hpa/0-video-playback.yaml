@@ -4,7 +4,6 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: hpa-video-playback
-  namespace: beta
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -28,7 +27,6 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: hpa-video-playback-videotest
-  namespace: beta
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -55,7 +53,6 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: hpa-video-playback-tcp
-  namespace: beta
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -79,7 +76,6 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: hpa-video-playback-videotest-tcp
-  namespace: beta
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -98,16 +94,3 @@ spec:
         target:
           type: AverageValue
           averageValue: 4000m # 4 conexiones maximas TCP
-
-  # Metricas personalizadas con su filtro que usa prometheus para crearla
-
-  # pbtcpvideotest: 'traefik_open_connections{namespace!="",pod!="",entrypoint="pbtcpvideotest"}'
-  # pbtcpbase:      'traefik_open_connections{namespace!="",pod!="",entrypoint="pbtcp"}'
-  # pbvideotest:    'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-videotest.*", host="playback.videotest.sitrack.io"}'
-  # pbbase:         'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback.*", host="playback.sitrack.io"}'
-
-  # Verificacion de metricas externas para el servicio de video llamado video-playback
-  #  kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbtcpvideotest"
-  #  kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbtcpbase"
-  #  kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbvideotest"
-  #  kubectl get --raw "/apis/external.metrics.k8s.io/v1beta1/namespaces/beta/pbbase"
