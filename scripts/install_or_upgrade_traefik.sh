@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source colors.sh
+source "$(dirname "$0")/colors.sh"
 
 ## Function to print messages with colors
 print_msg() {
@@ -20,7 +20,7 @@ ENV=$1
 print_msg $blue "Installing/Upgrading Traefik in environment $ENV..."
 helm repo add traefik https://helm.traefik.io/traefik
 helm repo update
-helm upgrade --install traefik traefik/traefik --namespace $ENV --create-namespace -f "1-helm-values/0-traefik-values.yaml"
+helm upgrade --install traefik traefik/traefik --version 32.1.1 --namespace $ENV --create-namespace -f "1-helm-values/0-traefik-values.yaml"
 sleep 20
 kubectl apply -f "3-middleware/ratelimit.yaml" -n $ENV
 kubectl apply -f "4-ingress/ingressroute-http.yaml" -n $ENV
