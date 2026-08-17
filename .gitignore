@@ -1,0 +1,23 @@
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
+
+# Kubeconfig y credenciales locales (por si se generan/descargan al probar)
+kubeconfig*.yaml
+*.kubeconfig
+*.pem
+*.key
+
+# Logs y salidas temporales de las pruebas locales
+*.log
+/tmp/
