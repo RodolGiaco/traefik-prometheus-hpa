@@ -1,8 +1,5 @@
 #!/bin/bash
 source "$(dirname "$0")/colors.sh"
-  #kind delete cluster --name=rodo
-  #kind create cluster --name=rodo
-  #kubectl create namespace beta
 ## Función para imprimir mensajes con colores
 print_msg() {
   local color=$1
@@ -42,6 +39,10 @@ while true; do
         ;;
  esac
 done
+ ## Crea el namespace del ambiente elegido si todavia no existe (idempotente,
+ ## sirve tanto para kind local como para un cluster GKE real).
+ kubectl create namespace "$ENV" --dry-run=client -o yaml | kubectl apply -f - >/dev/null 2>&1
+ print_msg $green "Namespace '$ENV' listo."
 }
 
 ## Dar permisos de ejecución a todos los scripts necesarios
@@ -50,6 +51,7 @@ chmod +x "$(dirname "$0")"/install_or_upgrade_traefik.sh
 chmod +x "$(dirname "$0")"/install_or_upgrade_prometheus.sh
 chmod +x "$(dirname "$0")"/install_hpa_apps.sh
 chmod +x "$(dirname "$0")"/external_metrics.sh
+chmod +x "$(dirname "$0")"/kind_cluster.sh
 
 ### Instalar jq si no está presente
 install_jq() {
@@ -73,6 +75,8 @@ install_jq() {
  "$blue"4)$reset see metrics
  "$blue"5)$reset delete and uninstall all
  "$blue"6)$reset apply hpa for apps video
+ "$blue"7)$reset create local kind cluster
+ "$blue"8)$reset delete local kind cluster
  "$blue"0)$reset Exit
  "$green"Choose an option: "$reset
 
@@ -99,6 +103,10 @@ case $option in
 	6) select_environment
      "$(dirname "$0")"/install_hpa_apps.sh $ENV
   	;;
+  7) "$(dirname "$0")"/kind_cluster.sh up
+     ;;
+  8) "$(dirname "$0")"/kind_cluster.sh down
+     ;;
   0) exit 0;;
   *) echo -e $red"Invalid option."$reset;;
 esac

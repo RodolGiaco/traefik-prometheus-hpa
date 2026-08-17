@@ -273,7 +273,9 @@ cd traefik-prometheus-hpa
 
 **Opción A — cluster local con `kind`** (para probar todo el flujo sin infraestructura real):
 ```bash
-kind create cluster --name rodo
+chmod +x scripts/init.sh
+./scripts/init.sh
+# elegí 7) create local kind cluster
 ```
 
 **Opción B — GKE real**: apuntá tu `kubectl` al contexto del cluster (`kubectl config use-context <contexto>`).
@@ -281,11 +283,12 @@ kind create cluster --name rodo
 ### 3. Instalar Traefik + Prometheus + HPA
 
 ```bash
-chmod +x scripts/init.sh
 ./scripts/init.sh
 ```
 
-Elegí `1) install traefik/prometheus/hpa` y después el ambiente (`beta`/`candidate`/`prod` — son namespaces, no clusters distintos). El script instala Traefik, Prometheus + Alertmanager + prometheus-adapter, y aplica los HPA y los pods de demo.
+Elegí `1) install traefik/prometheus/hpa` y después el ambiente (`beta`/`candidate`/`prod` — son namespaces, no clusters distintos; el namespace se crea solo si todavía no existe). El script instala Traefik, Prometheus + Alertmanager + prometheus-adapter, y aplica los HPA y los pods de demo.
+
+> El menú de `init.sh` también tiene `8) delete local kind cluster`, para tirar abajo el cluster de prueba entero cuando termines (además de `5) delete and uninstall all`, que solo desinstala lo que se aplicó adentro, sin tocar el cluster).
 
 ### 4. Mapear los dominios de prueba (solo para `kind` local)
 
