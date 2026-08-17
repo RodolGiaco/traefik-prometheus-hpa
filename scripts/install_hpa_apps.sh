@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source colors.sh
+source "$(dirname "$0")/colors.sh"
 
 ## Function to print messages with colors
 print_msg() {

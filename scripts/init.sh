@@ -1,7 +1,8 @@
 #!/bin/bash
-
-source colors.sh
-
+source "$(dirname "$0")/colors.sh"
+  #kind delete cluster --name=rodo
+  #kind create cluster --name=rodo
+  #kubectl create namespace beta
 ## Función para imprimir mensajes con colores
 print_msg() {
   local color=$1
@@ -44,11 +45,11 @@ done
 }
 
 ## Dar permisos de ejecución a todos los scripts necesarios
-chmod +x delete_all.sh
-chmod +x install_or_upgrade_traefik.sh
-chmod +x install_or_upgrade_prometheus.sh
-chmod +x install_hpa_apps.sh
-chmod +x external_metrics.sh
+chmod +x "$(dirname "$0")"/delete_all.sh
+chmod +x "$(dirname "$0")"/install_or_upgrade_traefik.sh
+chmod +x "$(dirname "$0")"/install_or_upgrade_prometheus.sh
+chmod +x "$(dirname "$0")"/install_hpa_apps.sh
+chmod +x "$(dirname "$0")"/external_metrics.sh
 
 ### Instalar jq si no está presente
 install_jq() {
@@ -80,23 +81,23 @@ install_jq() {
 
 case $option in
   1) select_environment
-     ./install_or_upgrade_traefik.sh $ENV
-     ./install_or_upgrade_prometheus.sh
-     ./install_hpa_apps.sh $ENV
+     "$(dirname "$0")"/install_or_upgrade_traefik.sh $ENV
+     "$(dirname "$0")"/install_or_upgrade_prometheus.sh
+     "$(dirname "$0")"/install_hpa_apps.sh $ENV
 	  ;;
 	2) select_environment
-     ./install_or_upgrade_traefik.sh $ENV
+     "$(dirname "$0")"/install_or_upgrade_traefik.sh $ENV
   	;;
-  3) ./install_or_upgrade_prometheus.sh
+  3) "$(dirname "$0")"/install_or_upgrade_prometheus.sh
 	  ;;
   4) select_environment
-     ./external_metrics.sh $ENV
+     "$(dirname "$0")"/external_metrics.sh $ENV
 	  ;;
   5) select_environment
-     ./delete_all.sh $ENV
+     "$(dirname "$0")"/delete_all.sh $ENV
 	  ;;
 	6) select_environment
-     ./install_hpa_apps.sh $ENV
+     "$(dirname "$0")"/install_hpa_apps.sh $ENV
   	;;
   0) exit 0;;
   *) echo -e $red"Invalid option."$reset;;
