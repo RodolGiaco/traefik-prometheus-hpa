@@ -1,53 +1,15 @@
-# Escala en base a la cantidad de solicitudes http
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: hpa-video-playback
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: video-playback
-  minReplicas: 1
-  maxReplicas: 4
-  metrics:
-    - type: External
-      external:
-        metric:
-          name: pbbase
-          selector:
-            matchLabels:
-              host: multimediakind.ddns.net
-        target:
-          type: AverageValue
-          averageValue: 100m
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: hpa-video-playback-videotest
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: video-playback-videotest
-  minReplicas: 1
-  maxReplicas: 4
-  metrics:
-    - type: External
-      external:
-        metric:
-          name: pbvideotest
-          selector:
-            matchLabels:
-              host: playback.videotest.sitrack.io
-        target:
-          type: AverageValue
-          averageValue: 100m
-
-
-# Escala en base a la cantidad de conexiones simultaneas TCP
+# video-playback expone metricas tanto HTTP (pbbase/pbvideotest, ver
+# 0-configmap/0-prometheus-adapter-config.yaml) como TCP (pbtcpbase/
+# pbtcpvideotest). Este archivo escala por la parte TCP.
+#
+# Un Deployment solo puede ser el scaleTargetRef de un unico HPA -- si en
+# algun momento se necesita escalar tambien por la parte HTTP, esa metrica
+# tiene que sumarse como una entrada mas dentro de "metrics:" de ESTE mismo
+# HPA, no como un HPA nuevo apuntando al mismo Deployment (Kubernetes lo
+# rechaza con "AmbiguousSelector").
+#
+# El selector usa "entrypoint" (no "host", como en 1-doug.yaml) porque la
+# metrica TCP viene de traefik_open_connections, que no tiene label de host.
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
