@@ -10,7 +10,7 @@ spec:
     - name: video-metrics-alerts
       rules:
         - alert: HighHttpRateV1
-          expr: rate(traefik_service_requests_total{namespace!="",pod!="",host="multimediakind.ddns.net"}[2m]) > 0.005
+          expr: rate(traefik_service_requests_total{namespace!="",pod!="",host="rodohpa.ddns.net"}[2m]) > 0.005
           for: 2m
           labels:
             severity: warning

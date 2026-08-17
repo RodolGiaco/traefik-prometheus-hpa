@@ -74,9 +74,7 @@ spec:
   entryPoints:
     - web
   routes:
-    # Se definen el enrutamiento para los services de tipo nodeport para el servicio de video llamado video-playback
-#    - match: Host(`playback.sitrack.io`) && PathPrefix(`/playback`)
-    - match: Host(`multimediakind.ddns.net`) && PathPrefix(`/playback`)
+    - match: Host(`rodohpa.ddns.net`) && PathPrefix(`/playback`)
       kind: Rule
       priority: 1
       middlewares:
@@ -95,8 +93,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`playback.videotest.sitrack.io`) && PathPrefix(`/playback`)
-#    - match: Host(`multimediatest.ddns.net`) && PathPrefix(`/playback`)
+    - match: Host(`rodohpaclient.ddns.net`) && PathPrefix(`/playback`)
       kind: Rule
       priority: 1
       middlewares:
@@ -115,9 +112,7 @@ spec:
   entryPoints:
     - web
   routes:
-    # Se definen el enrutamiento para los services de tipo nodeport para el servicio de video llamado doug
-#    - match: Host(`playback.sitrack.io`) && PathPrefix(`/api`)
-    - match: Host(`multimediakind.ddns.net`) && PathPrefix(`/api`)
+    - match: Host(`rodohpa.ddns.net`) && PathPrefix(`/api`)
       kind: Rule
       priority: 1
       middlewares:
@@ -125,7 +120,6 @@ spec:
       services:
         - name: doug-api
           port: 4444
-
 ---
 
 apiVersion: traefik.io/v1alpha1
@@ -136,8 +130,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`playback.videotest.sitrack.io`) && PathPrefix(`/api`)
-#    - match: Host(`multimediatest.ddns.net`) && PathPrefix(`/api`)
+    - match: Host(`rodohpaclient.ddns.net`) && PathPrefix(`/api`)
       kind: Rule
       priority: 1
       middlewares:

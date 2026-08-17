@@ -6,22 +6,21 @@ metadata:
   labels:
     app: prometheus-adapter
 data:
+  # Cada regla de "externalRules" define una metrica que despues aparece en
+  # /apis/external.metrics.k8s.io/v1beta1 y que un HPA puede leer:
+  #   seriesQuery   -> que serie de Prometheus dispara el descubrimiento de la regla
+  #   metricsQuery  -> el PromQL real que se ejecuta para calcular el valor
+  #   name.as       -> el nombre final de la metrica (el que usa el HPA)
+  #
+  # Ojo con la label "exported_service": no es una label propia de Traefik.
+  # Traefik expone su propia label "service" en traefik_service_requests_total,
+  # pero el ServiceMonitor de este mismo values (1-helm-values/1-prometheus-
+  # operator-monitoring-values.yaml) tambien agrega su propia label "service"
+  # (el nombre del Service de k8s, via service discovery). Cuando hay choque
+  # de nombres y no se usa honorLabels, Prometheus renombra la label original
+  # del target a "exported_<nombre>" -- por eso el filtro es "exported_service"
+  # y no "service".
   config.yaml: |
-    rules:
-      - seriesQuery: 
-        resources:
-          overrides:
-            namespace:
-              resource: namespace
-            pod:
-              resource: pod
-        name:
-          matches: "^(.*)_total"
-          as: "base-vpb"
-        metricsQuery: 'sum(rate(<<.Series>>{<<.LabelMatchers>>}[2m])) by (host, <<.GroupBy>>)'
-        
-    
-   
     externalRules:
       #///////////////////////// REGLAS DE METRICAS PARA EL CORPORATE BASE /////////////////////////////// # 
       
@@ -55,7 +54,7 @@ data:
         
         # Reglas de las metricas externas para conexiones HTTP video-playback
       
-      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-.*", host="multimediakind.ddns.net"}'
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-.*", host="rodohpa.ddns.net"}'
         resources:
           overrides:
             namespace:
@@ -65,11 +64,11 @@ data:
         name:
           matches: "^(.*)_total"
           as: "pbbase"
-        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*video-playback-.*", host="multimediakind.ddns.net"}[2m])) by (host)'
-          
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*video-playback-.*", host="rodohpa.ddns.net"}[2m])) by (host)'
+
         # Reglas de las metricas externas para conexiones HTTP doug
-          
-      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*doug-.*", host="multimediakind.ddns.net"}'  
+
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*doug-.*", host="rodohpa.ddns.net"}'
         resources:
           overrides:
             namespace:
@@ -79,7 +78,7 @@ data:
         name:
           matches: "^(.*)_total"
           as: "dgbase"
-        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*doug-.*", host="multimediakind.ddns.net"}[2m])) by (host)'
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*doug-.*", host="rodohpa.ddns.net"}[2m])) by (host)'
         
       # ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       #///////////////////////// REGLAS DE METRICAS PARA EL CORPORATE VIDEOTEST /////////////////////////////// # 
@@ -114,7 +113,7 @@ data:
         
         # Reglas de las metricas externas para conexiones HTTP video-playback
       
-      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-videotest.*", host="playback.videotest.sitrack.io"}'
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*video-playback-videotest.*", host="rodohpaclient.ddns.net"}'
         resources:
           overrides:
             namespace:
@@ -124,11 +123,11 @@ data:
         name:
           matches: "^(.*)_total"
           as: "pbvideotest"
-        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*video-playback-videotest.*", host="playback.videotest.sitrack.io"}[2m])) by (host)' 
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*video-playback-videotest.*", host="rodohpaclient.ddns.net"}[2m])) by (host)' 
         
         # Reglas de las metricas externas para conexiones HTTP doug
       
-      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*doug-videotest.*", host="playback.videotest.sitrack.io"}'
+      - seriesQuery: 'traefik_service_requests_total{namespace!="",exported_service=~".*doug-videotest.*", host="rodohpaclient.ddns.net"}'
         resources:
           overrides:
             namespace:
@@ -138,4 +137,4 @@ data:
         name:
           matches: "^(.*)_total"
           as: "dgvideotest"
-        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*doug-.*", host="playback.videotest.sitrack.io"}[2m])) by (host)'
+        metricsQuery: 'sum(rate(<<.Series>>{exported_service=~".*doug-.*", host="rodohpaclient.ddns.net"}[2m])) by (host)'

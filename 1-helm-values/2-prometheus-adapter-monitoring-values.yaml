@@ -10,6 +10,10 @@ image:
 
 logLevel: 6
 
+# Cada cuanto vuelve a preguntarle a Prometheus que series existen para cada
+# regla externalRules (0-configmap/0-prometheus-adapter-config.yaml). Una
+# metrica nueva (por ejemplo, la primera vez que llega trafico a un host)
+# puede tardar hasta este intervalo en aparecer en external.metrics.k8s.io.
 metricsRelistInterval: 1m
 
 listenPort: 6443
@@ -30,6 +34,9 @@ customLabels: {}
   # monitoring: prometheus-adapter
 
 # Url to access prometheus
+# Apunta al Prometheus de kube-prometheus-stack (Service "prometheus-operated"),
+# no al chart standalone "prometheus" que tambien se instala -- ese segundo
+# Prometheus no lo consulta nadie.
 prometheus:
   # Value is templated
   url: http://prometheus-operated.monitoring.svc

@@ -17,7 +17,7 @@ spec:
           name: dgbase
           selector:
             matchLabels:
-              host: multimediakind.ddns.net
+              host: rodohpa.ddns.net
         target:
           type: AverageValue
           averageValue: 100m
@@ -40,7 +40,7 @@ spec:
           name: dgvideotest
           selector:
             matchLabels:
-              host: playback.videotest.sitrack.io
+              host: rodohpaclient.ddns.net
         target:
           type: AverageValue
           averageValue: 100m
