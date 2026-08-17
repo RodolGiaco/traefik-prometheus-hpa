@@ -2,6 +2,10 @@
 
 source "$(dirname "$0")/colors.sh"
 
+## Las rutas a los YAML son relativas a la raiz del repo -- nos paramos
+## ahi sin importar desde donde se invoque este script.
+cd "$(dirname "$0")/.." || exit 1
+
 ## Function to print messages with colors
 print_msg() {
   local color=$1
