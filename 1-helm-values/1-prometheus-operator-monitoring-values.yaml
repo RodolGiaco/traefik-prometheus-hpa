@@ -1,6 +1,28 @@
 
 alertmanager:
-  enabled: false
+  enabled: true
+  alertmanagerSpec:
+    # Secret creado a mano (kubectl create secret), con el App Password de Gmail.
+    secrets:
+      - gmail-smtp
+  config:
+    global:
+      smtp_smarthost: "smtp.gmail.com:587"
+      smtp_from: "rodol.giacomodonatto@gmail.com"
+      smtp_auth_username: "rodol.giacomodonatto@gmail.com"
+      smtp_auth_password_file: /etc/alertmanager/secrets/gmail-smtp/password
+      smtp_require_tls: true
+    route:
+      receiver: "email-rodo"
+      group_by: ["alertname"]
+      group_wait: 10s
+      group_interval: 30s
+      repeat_interval: 5m
+    receivers:
+      - name: "email-rodo"
+        email_configs:
+          - to: "rodol.giacomodonatto@gmail.com"
+      - name: "null"
 
 grafana:
   enabled: false
@@ -17,6 +39,14 @@ prometheus:
 
   # Configuracion del servicemonitor para traefik
   # Tener en cuenta que todos los servicesmonitor definidos aca se le agrega el matchLabels -> release: prometheus-operator
+  #
+  # OJO con "app.kubernetes.io/instance": el chart de Traefik no usa el nombre
+  # del release de Helm tal cual para esa label -- le agrega el namespace como
+  # sufijo (instanceLabelOverride por default = "<release>-<namespace>"). Como
+  # el release siempre se llama "traefik" (ver scripts/install_or_upgrade_traefik.sh),
+  # el valor real termina siendo "traefik-<namespace>". Si se agrega un
+  # ServiceMonitor para otro ambiente, el selector tiene que apuntar a
+  # "traefik-<ese-namespace>", no solo a "traefik".
   additionalServiceMonitors:
     - name: traefik
       namespace: monitoring
